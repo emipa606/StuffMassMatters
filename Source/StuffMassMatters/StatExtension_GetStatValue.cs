@@ -14,6 +14,11 @@ public static class StatExtension_GetStatValue
             return;
         }
 
+        if (thing == null)
+        {
+            return;
+        }
+
         __result = Main.CalculateRelativeMass(thing, __result);
     }
 }

@@ -21,9 +21,6 @@ public static class Main
         {
             StuffCategoryThings[stuffCategoryDef] = DefDatabase<ThingDef>.AllDefsListForReading.Where(def =>
                 def.IsStuff && def.stuffProps?.categories.Contains(stuffCategoryDef) == true).ToList();
-
-            //Log.Message(
-            //    $"[StuffMassMatters]: {stuffCategoryDef} contains {string.Join(", ", StuffCategoryThings[stuffCategoryDef])}");
         }
 
         Log.Message($"[StuffMassMatters]: Cached {StuffCategoryThings.Count} stuffcategories");
@@ -34,7 +31,17 @@ public static class Main
 
     public static float CalculateRelativeMass(Thing thing, float vanillaMass)
     {
+        if (thing?.def == null)
+        {
+            return vanillaMass;
+        }
+
         if (!thing.def.MadeFromStuff)
+        {
+            return vanillaMass;
+        }
+
+        if (thing.Stuff == null)
         {
             return vanillaMass;
         }
@@ -44,13 +51,9 @@ public static class Main
             return ThingMasses[thing];
         }
 
-        //Log.Message($"{thing} vanillaMass: {vanillaMass}");
-
-        //Log.Message($"thing.Stuff ({thing.Stuff}) mass : {thing.Stuff.BaseMass}");
 
         if (thing.def.stuffCategories == null || thing.def.stuffCategories.Any() == false)
         {
-            //Log.Message($"{thing.def} has no stuff categories");
             ThingMasses[thing] = vanillaMass;
             return vanillaMass;
         }
@@ -64,12 +67,10 @@ public static class Main
         var result = canBeMadeFrom.TryMaxBy(def => def.stuffProps.commonality, out var baseThing);
         if (!result)
         {
-            //Log.Message($"Failed fetching max commonality from {canBeMadeFrom.Count} stuffdefs");
             ThingMasses[thing] = vanillaMass;
             return vanillaMass;
         }
 
-        //Log.Message($"{baseThing} basemass: {baseThing.BaseMass}");
         var stuffMass = thing.Stuff.BaseMass;
         if (thing.Stuff.smallVolume)
         {
@@ -77,7 +78,6 @@ public static class Main
         }
 
         ThingMasses[thing] = vanillaMass * (stuffMass / baseThing.BaseMass);
-        //Log.Message($"Mass changed from {vanillaMass} to {ThingMasses[thing]}");
         return ThingMasses[thing];
     }
 }

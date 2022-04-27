@@ -9,6 +9,7 @@ No longer is a Uranium plate armor as easy to carry as one made of Bamboo and pa
 
 The mod looks at the stuffcategories that an item can be made of and uses the stuff with the highest commonality value as a basevalue.
 It then calculates the relative mass based on the stuff the item is made of.
+To modify these values, try my companion mod: https://steamcommunity.com/sharedfiles/filedetails/?id=2788278669]Change Stuff Properties
 Affects all items that can be made from different "stuff", mostly apparel but some weapons and buildings as well.
 
 ![Image](https://i.imgur.com/O0IIlYj.png)
