@@ -1,5 +1,8 @@
 # Changelog for StuffMassMatters
 
+1.3.2 - Better caching of values, should work better with mods like [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2679126859]Compositable Loadouts[/url] now. Thanks Wiri for the tip and ModZero for reporting!
+
+
 1.3.1 - Should no longer cause empty inventory if the mod the material an eqipped item is made from has been removed.
 
 

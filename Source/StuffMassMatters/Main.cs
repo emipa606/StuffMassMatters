@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,12 +12,12 @@ namespace StuffMassMatters;
 public static class Main
 {
     public static readonly Dictionary<StuffCategoryDef, List<ThingDef>> StuffCategoryThings;
-    public static readonly Dictionary<Thing, float> ThingMasses;
+    public static readonly Dictionary<Tuple<ThingDef, ThingDef>, float> ThingMasses;
 
     static Main()
     {
         StuffCategoryThings = new Dictionary<StuffCategoryDef, List<ThingDef>>();
-        ThingMasses = new Dictionary<Thing, float>();
+        ThingMasses = new Dictionary<Tuple<ThingDef, ThingDef>, float>();
         foreach (var stuffCategoryDef in DefDatabase<StuffCategoryDef>.AllDefsListForReading)
         {
             StuffCategoryThings[stuffCategoryDef] = DefDatabase<ThingDef>.AllDefsListForReading.Where(def =>
@@ -46,16 +47,17 @@ public static class Main
             return vanillaMass;
         }
 
-        if (ThingMasses.ContainsKey(thing))
+        if (thing.def.stuffCategories == null || thing.def.stuffCategories.Any() == false)
         {
-            return ThingMasses[thing];
+            return vanillaMass;
         }
 
 
-        if (thing.def.stuffCategories == null || thing.def.stuffCategories.Any() == false)
+        var currentTuple = new Tuple<ThingDef, ThingDef>(thing.def, thing.Stuff);
+
+        if (ThingMasses.ContainsKey(currentTuple))
         {
-            ThingMasses[thing] = vanillaMass;
-            return vanillaMass;
+            return ThingMasses[currentTuple];
         }
 
         var canBeMadeFrom = new HashSet<ThingDef>();
@@ -67,7 +69,7 @@ public static class Main
         var result = canBeMadeFrom.TryMaxBy(def => def.stuffProps.commonality, out var baseThing);
         if (!result)
         {
-            ThingMasses[thing] = vanillaMass;
+            ThingMasses[currentTuple] = vanillaMass;
             return vanillaMass;
         }
 
@@ -77,7 +79,7 @@ public static class Main
             stuffMass *= 75f;
         }
 
-        ThingMasses[thing] = vanillaMass * (stuffMass / baseThing.BaseMass);
-        return ThingMasses[thing];
+        ThingMasses[currentTuple] = vanillaMass * (stuffMass / baseThing.BaseMass);
+        return ThingMasses[currentTuple];
     }
 }
