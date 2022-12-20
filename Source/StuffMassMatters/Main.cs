@@ -52,8 +52,17 @@ public static class Main
             return vanillaMass;
         }
 
+        return CalculateRelativeMass(thing.def, thing.Stuff, vanillaMass);
+    }
 
-        var currentTuple = new Tuple<ThingDef, ThingDef>(thing.def, thing.Stuff);
+    public static float CalculateRelativeMass(ThingDef thingDef, ThingDef stuff, float vanillaMass)
+    {
+        if (thingDef == null)
+        {
+            return vanillaMass;
+        }
+
+        var currentTuple = new Tuple<ThingDef, ThingDef>(thingDef, stuff);
 
         if (ThingMasses.ContainsKey(currentTuple))
         {
@@ -61,7 +70,7 @@ public static class Main
         }
 
         var canBeMadeFrom = new HashSet<ThingDef>();
-        foreach (var stuffPropsCategory in thing.def.stuffCategories)
+        foreach (var stuffPropsCategory in thingDef.stuffCategories)
         {
             canBeMadeFrom.AddRange(StuffCategoryThings[stuffPropsCategory]);
         }
@@ -73,8 +82,8 @@ public static class Main
             return vanillaMass;
         }
 
-        var stuffMass = thing.Stuff.BaseMass;
-        if (thing.Stuff.smallVolume)
+        var stuffMass = stuff.BaseMass;
+        if (stuff.smallVolume)
         {
             stuffMass *= 75f;
         }

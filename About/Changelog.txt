@@ -1,5 +1,8 @@
 # Changelog for StuffMassMatters
 
+1.4.2 - Added a patch for the abstract statvalues. Should now show the correct values on a info-windows.
+
+
 1.4.1 - Mod updated for 1.4 and passed autotests
 
 
