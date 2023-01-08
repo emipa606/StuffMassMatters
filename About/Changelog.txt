@@ -1,5 +1,8 @@
 # Changelog for StuffMassMatters
 
+1.4.4 - Missed the exclusion of positive factors
+
+
 1.4.3 - Added option to let stuff-weight affect negative movementspeed factors.
 Used DeepL to update translations for ChineseSimplified, French, German, Russian
 

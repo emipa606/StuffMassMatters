@@ -37,7 +37,7 @@ public static class Main
 
     public static float CalculateRelativeMoveSpeedFactor(Thing thing, float movespeedFactor)
     {
-        if (movespeedFactor == 0)
+        if (movespeedFactor >= 0)
         {
             return movespeedFactor;
         }
@@ -88,14 +88,7 @@ public static class Main
             stuffMass *= 75f;
         }
 
-        if (movespeedFactor < 0)
-        {
-            ThingSpeedFactors[currentTuple] = movespeedFactor * (stuffMass / baseThing.BaseMass);
-        }
-        else
-        {
-            ThingSpeedFactors[currentTuple] = movespeedFactor / (stuffMass / baseThing.BaseMass);
-        }
+        ThingSpeedFactors[currentTuple] = movespeedFactor * (stuffMass / baseThing.BaseMass);
 
         return ThingSpeedFactors[currentTuple];
     }

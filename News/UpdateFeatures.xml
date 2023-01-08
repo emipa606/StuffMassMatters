@@ -1,15 +1,14 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
-	<HugsLib.UpdateFeatureDef Abstract="true" Name="StuffMassMatters_UpdateFeatureBase">
-		<modNameReadable>StuffMassMatters</modNameReadable>
-		<linkUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=2787438435</linkUrl>
-	</HugsLib.UpdateFeatureDef>
-	<HugsLib.UpdateFeatureDef ParentName="StuffMassMatters_UpdateFeatureBase">
-		<defName>StuffMassMatters_1_4_3</defName>
-		<assemblyVersion>1.4.3</assemblyVersion>
-		<content>There is now an additional effect to this mod (can be disabled in the settings).
+  <HugsLib.UpdateFeatureDef Abstract="true" Name="StuffMassMatters_UpdateFeatureBase">
+    <modNameReadable>StuffMassMatters</modNameReadable>
+    <linkUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=2787438435</linkUrl>
+  </HugsLib.UpdateFeatureDef>
+  <HugsLib.UpdateFeatureDef ParentName="StuffMassMatters_UpdateFeatureBase">
+    <defName>StuffMassMatters_1_4_3</defName>
+    <assemblyVersion>1.4.3</assemblyVersion>
+    <content>There is now an additional effect to this mod (can be disabled in the settings).
 Items that has a negative movement speed factor, like plate armor, will not have the stuff-weight affect this as well.
 So for example a Uranium plate armor will have a lot higher movement speed penalty than an armor made of plasteel.</content>
-	</HugsLib.UpdateFeatureDef>
+  </HugsLib.UpdateFeatureDef>
 </Defs>
-

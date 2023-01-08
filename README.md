@@ -12,6 +12,8 @@ It then calculates the relative mass based on the stuff the item is made of.
 To modify these values, try my companion mod: https://steamcommunity.com/sharedfiles/filedetails/?id=2788278669]Change Stuff Properties
 Affects all items that can be made from different "stuff", mostly apparel but some weapons and buildings as well.
 
+I also added an option to let weight affect any negative movement speed factors on items. So for example a uranium plate armor has a much higher movement speed penalty than an armor made of plasteel. It will not change positive values, since these will probably only be used on items like power-armor that would not be affected by its weight.
+
 ![Image](https://i.imgur.com/O0IIlYj.png)
 
 Since modding is just a hobby for me I expect no donations to keep modding. If you still want to show your support you can gift me anything from my https://store.steampowered.com/wishlist/id/Mlie]Wishlist or buy me a cup of tea.
@@ -29,6 +31,7 @@ https://ko-fi.com/G2G55DDYD]![Image](https://i.imgur.com/Utx6OIH.png)
 -  For best support, please use the Discord-channel for error-reporting.
 -  Do not report errors by making a discussion-thread, I get no notification of that.
 -  If you have the solution for a problem, please post it to the GitHub repository.
+
 
 
 
