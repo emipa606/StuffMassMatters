@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <SMM.modVersion>Installed mod-version: {0}</SMM.modVersion>
+  <SMM.AffectMovementSpeedFactors>Also affect negative movement speeds</SMM.AffectMovementSpeedFactors>
+  <SMM.AffectMovementSpeedFactorsTT>If an item also has a negative movement-speed factor, this will be changed based on the relative weight of the stuff its made of. So a uranium platearmor has a much higher movement-speed penalty than a plasteel armor. Only negative factors are affected, since positive values assumes power armor or similar that is not affected by weight.</SMM.AffectMovementSpeedFactorsTT>
+</LanguageData>

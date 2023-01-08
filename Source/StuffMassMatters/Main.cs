@@ -13,11 +13,15 @@ public static class Main
 {
     public static readonly Dictionary<StuffCategoryDef, List<ThingDef>> StuffCategoryThings;
     public static readonly Dictionary<Tuple<ThingDef, ThingDef>, float> ThingMasses;
+    public static readonly Dictionary<Tuple<ThingDef, ThingDef>, float> ThingSpeedFactors;
+
+    public static Thing CurrentThing;
 
     static Main()
     {
         StuffCategoryThings = new Dictionary<StuffCategoryDef, List<ThingDef>>();
         ThingMasses = new Dictionary<Tuple<ThingDef, ThingDef>, float>();
+        ThingSpeedFactors = new Dictionary<Tuple<ThingDef, ThingDef>, float>();
         foreach (var stuffCategoryDef in DefDatabase<StuffCategoryDef>.AllDefsListForReading)
         {
             StuffCategoryThings[stuffCategoryDef] = DefDatabase<ThingDef>.AllDefsListForReading.Where(def =>
@@ -28,6 +32,72 @@ public static class Main
 
         var harmony = new Harmony("Mlie.StuffMassMatters");
         harmony.PatchAll(Assembly.GetExecutingAssembly());
+    }
+
+
+    public static float CalculateRelativeMoveSpeedFactor(Thing thing, float movespeedFactor)
+    {
+        if (movespeedFactor == 0)
+        {
+            return movespeedFactor;
+        }
+
+        if (thing?.def == null)
+        {
+            return movespeedFactor;
+        }
+
+        if (!thing.def.MadeFromStuff)
+        {
+            return movespeedFactor;
+        }
+
+        if (thing.Stuff == null)
+        {
+            return movespeedFactor;
+        }
+
+        if (thing.def.stuffCategories == null || thing.def.stuffCategories.Any() == false)
+        {
+            return movespeedFactor;
+        }
+
+        var currentTuple = new Tuple<ThingDef, ThingDef>(thing.def, thing.Stuff);
+
+        if (ThingSpeedFactors.ContainsKey(currentTuple))
+        {
+            return ThingSpeedFactors[currentTuple];
+        }
+
+        var canBeMadeFrom = new HashSet<ThingDef>();
+        foreach (var stuffPropsCategory in thing.def.stuffCategories)
+        {
+            canBeMadeFrom.AddRange(StuffCategoryThings[stuffPropsCategory]);
+        }
+
+        var result = canBeMadeFrom.TryMaxBy(def => def.stuffProps.commonality, out var baseThing);
+        if (!result)
+        {
+            ThingSpeedFactors[currentTuple] = movespeedFactor;
+            return movespeedFactor;
+        }
+
+        var stuffMass = thing.Stuff.BaseMass;
+        if (thing.Stuff.smallVolume)
+        {
+            stuffMass *= 75f;
+        }
+
+        if (movespeedFactor < 0)
+        {
+            ThingSpeedFactors[currentTuple] = movespeedFactor * (stuffMass / baseThing.BaseMass);
+        }
+        else
+        {
+            ThingSpeedFactors[currentTuple] = movespeedFactor / (stuffMass / baseThing.BaseMass);
+        }
+
+        return ThingSpeedFactors[currentTuple];
     }
 
     public static float CalculateRelativeMass(Thing thing, float vanillaMass)

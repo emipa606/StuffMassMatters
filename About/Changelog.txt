@@ -1,5 +1,9 @@
 # Changelog for StuffMassMatters
 
+1.4.3 - Added option to let stuff-weight affect negative movementspeed factors.
+Used DeepL to update translations for ChineseSimplified, French, German, Russian
+
+
 1.4.2 - Added a patch for the abstract statvalues. Should now show the correct values on a info-windows.
 
 
