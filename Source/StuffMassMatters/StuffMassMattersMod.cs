@@ -15,36 +15,20 @@ internal class StuffMassMattersMod : Mod
     private static string currentVersion;
 
     /// <summary>
-    ///     The private settings
-    /// </summary>
-    private StuffMassMattersSettings settings;
-
-    /// <summary>
     ///     Constructor
     /// </summary>
     /// <param name="content"></param>
     public StuffMassMattersMod(ModContentPack content) : base(content)
     {
         instance = this;
+        Settings = GetSettings<StuffMassMattersSettings>();
         currentVersion = VersionFromManifest.GetVersionFromModMetaData(content.ModMetaData);
     }
 
     /// <summary>
     ///     The instance-settings for the mod
     /// </summary>
-    internal StuffMassMattersSettings Settings
-    {
-        get
-        {
-            if (settings == null)
-            {
-                settings = GetSettings<StuffMassMattersSettings>();
-            }
-
-            return settings;
-        }
-        set => settings = value;
-    }
+    internal StuffMassMattersSettings Settings { get; }
 
     /// <summary>
     ///     The title for the mod-settings

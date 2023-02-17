@@ -64,9 +64,9 @@ public static class Main
 
         var currentTuple = new Tuple<ThingDef, ThingDef>(thing.def, thing.Stuff);
 
-        if (ThingSpeedFactors.ContainsKey(currentTuple))
+        if (ThingSpeedFactors.TryGetValue(currentTuple, out var factor))
         {
-            return ThingSpeedFactors[currentTuple];
+            return factor;
         }
 
         var canBeMadeFrom = new HashSet<ThingDef>();
@@ -127,9 +127,9 @@ public static class Main
 
         var currentTuple = new Tuple<ThingDef, ThingDef>(thingDef, stuff);
 
-        if (ThingMasses.ContainsKey(currentTuple))
+        if (ThingMasses.TryGetValue(currentTuple, out var mass))
         {
-            return ThingMasses[currentTuple];
+            return mass;
         }
 
         var canBeMadeFrom = new HashSet<ThingDef>();

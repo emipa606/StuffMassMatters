@@ -1,5 +1,8 @@
 # Changelog for StuffMassMatters
 
+1.4.5 - Better save-compatibility, thanks Taranchuk
+
+
 1.4.4 - Missed the exclusion of positive factors
 
 
