@@ -4,12 +4,12 @@ using Verse;
 
 namespace StuffMassMatters;
 
-[HarmonyPatch(typeof(StatWorker), "StatOffsetFromGear")]
+[HarmonyPatch(typeof(StatWorker), nameof(StatWorker.StatOffsetFromGear))]
 public static class StatWorker_StatOffsetFromGear
 {
     public static void Prefix(Thing gear, StatDef stat)
     {
-        if (!StuffMassMattersMod.instance.Settings.AffectMovementSpeedFactors)
+        if (!StuffMassMattersMod.Instance.Settings.AffectMovementSpeedFactors)
         {
             return;
         }

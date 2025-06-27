@@ -4,7 +4,7 @@ using Verse;
 
 namespace StuffMassMatters;
 
-[HarmonyPatch(typeof(StatExtension), "GetStatValue")]
+[HarmonyPatch(typeof(StatExtension), nameof(StatExtension.GetStatValue))]
 public static class StatExtension_GetStatValue
 {
     public static void Postfix(Thing thing, StatDef stat, ref float __result)

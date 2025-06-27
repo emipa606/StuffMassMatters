@@ -4,12 +4,13 @@ using RimWorld;
 
 namespace StuffMassMatters;
 
-[HarmonyPatch(typeof(StatUtility), "GetStatOffsetFromList", typeof(List<StatModifier>), typeof(StatDef))]
+[HarmonyPatch(typeof(StatUtility), nameof(StatUtility.GetStatOffsetFromList), typeof(List<StatModifier>),
+    typeof(StatDef))]
 public static class StatUtility_GetStatOffsetFromList
 {
     public static void Postfix(StatDef stat, ref float __result)
     {
-        if (!StuffMassMattersMod.instance.Settings.AffectMovementSpeedFactors || stat != StatDefOf.MoveSpeed ||
+        if (!StuffMassMattersMod.Instance.Settings.AffectMovementSpeedFactors || stat != StatDefOf.MoveSpeed ||
             Main.CurrentThing == null)
         {
             return;

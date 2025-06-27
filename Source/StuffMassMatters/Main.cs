@@ -11,24 +11,24 @@ namespace StuffMassMatters;
 [StaticConstructorOnStartup]
 public static class Main
 {
-    public static readonly Dictionary<StuffCategoryDef, List<ThingDef>> StuffCategoryThings;
-    public static readonly Dictionary<Tuple<ThingDef, ThingDef>, float> ThingMasses;
-    public static readonly Dictionary<Tuple<ThingDef, ThingDef>, float> ThingSpeedFactors;
+    private static readonly Dictionary<StuffCategoryDef, List<ThingDef>> stuffCategoryThings;
+    private static readonly Dictionary<Tuple<ThingDef, ThingDef>, float> thingMasses;
+    private static readonly Dictionary<Tuple<ThingDef, ThingDef>, float> thingSpeedFactors;
 
     public static Thing CurrentThing;
 
     static Main()
     {
-        StuffCategoryThings = new Dictionary<StuffCategoryDef, List<ThingDef>>();
-        ThingMasses = new Dictionary<Tuple<ThingDef, ThingDef>, float>();
-        ThingSpeedFactors = new Dictionary<Tuple<ThingDef, ThingDef>, float>();
+        stuffCategoryThings = new Dictionary<StuffCategoryDef, List<ThingDef>>();
+        thingMasses = new Dictionary<Tuple<ThingDef, ThingDef>, float>();
+        thingSpeedFactors = new Dictionary<Tuple<ThingDef, ThingDef>, float>();
         foreach (var stuffCategoryDef in DefDatabase<StuffCategoryDef>.AllDefsListForReading)
         {
-            StuffCategoryThings[stuffCategoryDef] = DefDatabase<ThingDef>.AllDefsListForReading.Where(def =>
+            stuffCategoryThings[stuffCategoryDef] = DefDatabase<ThingDef>.AllDefsListForReading.Where(def =>
                 def.IsStuff && def.stuffProps?.categories.Contains(stuffCategoryDef) == true).ToList();
         }
 
-        Log.Message($"[StuffMassMatters]: Cached {StuffCategoryThings.Count} stuffcategories");
+        Log.Message($"[StuffMassMatters]: Cached {stuffCategoryThings.Count} stuffcategories");
 
         var harmony = new Harmony("Mlie.StuffMassMatters");
         harmony.PatchAll(Assembly.GetExecutingAssembly());
@@ -37,34 +37,15 @@ public static class Main
 
     public static float CalculateRelativeMoveSpeedFactor(Thing thing, float movespeedFactor)
     {
-        if (movespeedFactor >= 0)
-        {
-            return movespeedFactor;
-        }
-
-        if (thing?.def == null)
-        {
-            return movespeedFactor;
-        }
-
-        if (!thing.def.MadeFromStuff)
-        {
-            return movespeedFactor;
-        }
-
-        if (thing.Stuff == null)
-        {
-            return movespeedFactor;
-        }
-
-        if (thing.def.stuffCategories == null || thing.def.stuffCategories.Any() == false)
+        if (movespeedFactor >= 0 || thing?.def is not { MadeFromStuff: true } || thing.Stuff == null ||
+            thing.def.stuffCategories == null || !thing.def.stuffCategories.Any())
         {
             return movespeedFactor;
         }
 
         var currentTuple = new Tuple<ThingDef, ThingDef>(thing.def, thing.Stuff);
 
-        if (ThingSpeedFactors.TryGetValue(currentTuple, out var factor))
+        if (thingSpeedFactors.TryGetValue(currentTuple, out var factor))
         {
             return factor;
         }
@@ -72,13 +53,13 @@ public static class Main
         var canBeMadeFrom = new HashSet<ThingDef>();
         foreach (var stuffPropsCategory in thing.def.stuffCategories)
         {
-            canBeMadeFrom.AddRange(StuffCategoryThings[stuffPropsCategory]);
+            canBeMadeFrom.AddRange(stuffCategoryThings[stuffPropsCategory]);
         }
 
         var result = canBeMadeFrom.TryMaxBy(def => def.stuffProps.commonality, out var baseThing);
         if (!result)
         {
-            ThingSpeedFactors[currentTuple] = movespeedFactor;
+            thingSpeedFactors[currentTuple] = movespeedFactor;
             return movespeedFactor;
         }
 
@@ -88,29 +69,15 @@ public static class Main
             stuffMass *= 75f;
         }
 
-        ThingSpeedFactors[currentTuple] = movespeedFactor * (stuffMass / baseThing.BaseMass);
+        thingSpeedFactors[currentTuple] = movespeedFactor * (stuffMass / baseThing.BaseMass);
 
-        return ThingSpeedFactors[currentTuple];
+        return thingSpeedFactors[currentTuple];
     }
 
     public static float CalculateRelativeMass(Thing thing, float vanillaMass)
     {
-        if (thing?.def == null)
-        {
-            return vanillaMass;
-        }
-
-        if (!thing.def.MadeFromStuff)
-        {
-            return vanillaMass;
-        }
-
-        if (thing.Stuff == null)
-        {
-            return vanillaMass;
-        }
-
-        if (thing.def.stuffCategories == null || thing.def.stuffCategories.Any() == false)
+        if (thing?.def is not { MadeFromStuff: true } || thing.Stuff == null || thing.def.stuffCategories == null ||
+            !thing.def.stuffCategories.Any())
         {
             return vanillaMass;
         }
@@ -127,7 +94,7 @@ public static class Main
 
         var currentTuple = new Tuple<ThingDef, ThingDef>(thingDef, stuff);
 
-        if (ThingMasses.TryGetValue(currentTuple, out var mass))
+        if (thingMasses.TryGetValue(currentTuple, out var mass))
         {
             return mass;
         }
@@ -135,13 +102,13 @@ public static class Main
         var canBeMadeFrom = new HashSet<ThingDef>();
         foreach (var stuffPropsCategory in thingDef.stuffCategories)
         {
-            canBeMadeFrom.AddRange(StuffCategoryThings[stuffPropsCategory]);
+            canBeMadeFrom.AddRange(stuffCategoryThings[stuffPropsCategory]);
         }
 
         var result = canBeMadeFrom.TryMaxBy(def => def.stuffProps.commonality, out var baseThing);
         if (!result)
         {
-            ThingMasses[currentTuple] = vanillaMass;
+            thingMasses[currentTuple] = vanillaMass;
             return vanillaMass;
         }
 
@@ -151,7 +118,7 @@ public static class Main
             stuffMass *= 75f;
         }
 
-        ThingMasses[currentTuple] = vanillaMass * (stuffMass / baseThing.BaseMass);
-        return ThingMasses[currentTuple];
+        thingMasses[currentTuple] = vanillaMass * (stuffMass / baseThing.BaseMass);
+        return thingMasses[currentTuple];
     }
 }
